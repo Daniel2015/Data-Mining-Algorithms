@@ -64,8 +64,8 @@ public class FrogLeapPuzzleDFS {
     }
 
     public static void printPathToSearchedState() {
-        while(!myStack.empty()) {
-            System.out.println(Arrays.toString(myStack.pop()));
+        for(int i = 0; i < myStack.size(); i++) {
+            System.out.println(Arrays.toString(myStack.get(i)));
         }
     }
 
