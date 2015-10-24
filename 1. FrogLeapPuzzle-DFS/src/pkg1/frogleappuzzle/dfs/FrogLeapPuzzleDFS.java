@@ -9,7 +9,6 @@ import java.util.Stack;
 public class FrogLeapPuzzleDFS {
 
     public static Stack<Integer[]> myStack = new Stack<>();
-    public static List<Integer[]> pathToSearchedState = new ArrayList<>();
 
     public static void main(String[] args) {
         System.out.print("N: ");
@@ -18,7 +17,7 @@ public class FrogLeapPuzzleDFS {
         Integer[] startingState = constructStartingState(n);
         Integer[] finalState = constructFinalState(startingState);
         DFS(startingState, finalState);
-        printPathSearchedState();
+        printPathToSearchedState();
     }
 
     public static Integer[] constructStartingState(Integer n) {
@@ -43,29 +42,30 @@ public class FrogLeapPuzzleDFS {
         return finalState;
     }
 
-    public static void DFS(Integer[] startingState, Integer[] finalState) {
-        pathToSearchedState.add(startingState);
+    public static boolean DFS(Integer[] startingState, Integer[] finalState) {
         if (Arrays.equals(startingState, finalState)) {
             myStack.push(finalState);
+            return true;
         } else {
             myStack.push(startingState);
             List<Integer[]> availableEdges = findAvailableEdges(startingState, finalState);
             if (availableEdges.isEmpty()) {
-                myStack.pop();
+                return false;
             } else {
                 for (int i = 0; i < availableEdges.size(); i++) {
-                    if (myStack.peek().equals(finalState)) {
-                        break;
+                    if(DFS(availableEdges.get(i), finalState)==true){
+                        return true;
                     }
-                    DFS(availableEdges.get(i), finalState);
+                    myStack.pop();
                 }
             }
         }
+        return false;
     }
 
-    public static void printPathSearchedState() {
-        for (int i = 0; i < pathToSearchedState.size(); i++) {
-            System.out.println(Arrays.toString(pathToSearchedState.get(i)));
+    public static void printPathToSearchedState() {
+        while(!myStack.empty()) {
+            System.out.println(Arrays.toString(myStack.pop()));
         }
     }
 
